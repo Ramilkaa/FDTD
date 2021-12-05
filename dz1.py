@@ -26,5 +26,5 @@ out.close()
 
 pylab.plot(x, y)
 pylab.grid()
-pylab.show()
 pylab.savefig("results/task1.png")
+pylab.show()
