@@ -38,7 +38,6 @@ class GaussianMod:
     def getE(self, time):
         return self.magnitude * numpy.sin(2 * numpy.pi * self.Sc * time / self.Nl) * numpy.exp(-((time - self.dg) / self.wg) ** 2)
 
-
 if __name__ == '__main__':
     # Волновое сопротивление свободного пространства
     W0 = 120.0 * numpy.pi
@@ -58,10 +57,10 @@ if __name__ == '__main__':
     # Размер области моделирования в метрах
     maxSize_m = 1.5
 
-    eps = 4
+    eps1 = 4
 
       # Скорость распространения волны
-    v=c/numpy.sqrt(eps)
+    v=c/numpy.sqrt(eps1)
 
     # Переход к дискретным отсчетам
     # Дискрет по времени
@@ -88,7 +87,7 @@ if __name__ == '__main__':
     # Параметры среды
     # Диэлектрическая проницаемость
     eps = numpy.ones(maxSize)
-    eps[:] = eps
+    eps[:] = eps1
 
     # Магнитная проницаемость
     mu = numpy.ones(maxSize - 1)
@@ -118,9 +117,7 @@ if __name__ == '__main__':
 
     # Создание экземпляра класса для отображения
     # распределения поля в пространстве
-    #display = tools.AnimateFieldDisplay(maxSize,
-              #                          display_ymin, display_ymax,
-           #                             display_ylabel)
+
     display = tools.AnimateFieldDisplay(dx, dt,
                                         maxSize,
                                         display_ymin, display_ymax,
@@ -136,8 +133,8 @@ if __name__ == '__main__':
 
         # Источник возбуждения с использованием метода
         # Total Field / Scattered Field
-        Hy[sourcePos - 1] -= Sc / (W0 * mu[sourcePos - 1]) * source.getE(q)
-        #Hy[sourcePos - 1] += (-1/W0)*source.getE(q-1)
+        Hy[sourcePos - 1] -= Sc / (W0 * mu[sourcePos - 1]) * source.getE(q-0.5)
+        #Hy[sourcePos - 1] += (-1/W0)*source.getE(q-0.5)
 
         # Расчет компоненты поля E
         Hy_shift = Hy[: -1]
@@ -171,7 +168,7 @@ tlist = numpy.arange(0, maxTime * dt, dt)
 
 # Вывод сигнала и спектра
 fig, (ax1, ax2) = plt.subplots(2, 1)
-ax1.set_xlim(0, 5e-9)
+ax1.set_xlim(3e-9, 8e-9)
 ax1.set_xlabel('t, с')
 ax1.set_ylabel('Ez, В/м')
 ax1.plot(tlist, probe.E/numpy.max(probe.E))
